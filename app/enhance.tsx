@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createDay, getDays, getMonths } from "./server";
 
 type year = {
@@ -20,7 +20,7 @@ type days = {
 type Enhances = {
   years: year[]
 }
-export function Enhance({ years }: Enhances) {
+export default function Enhance({ years }: Enhances) {
   const boxs = Array.from({ length: 30 }, (_, i) => i + 1);
   const [months, setMonths] = useState<month[]>([]);
   const [days, setDays] = useState<days[]>([]);
@@ -42,8 +42,10 @@ export function Enhance({ years }: Enhances) {
     StoreYearId = localStorage.getItem('yearId');
     StoreMonthId = localStorage.getItem('monthId');
   }
+  useEffect(() => {
+    fetchALl()
+  }, [])
 
-  window.onload = fetchALl;
   async function fetchALl() {
     const month: month[] = await getMonths(StoreYearId!) || [];
     setMonths(month);
@@ -113,7 +115,7 @@ export function Enhance({ years }: Enhances) {
         </div>
       </div>
       <div className="relative bg-white w-[200px] border border-black cursor-pointer p-3 rounded mx-auto my-5 flex justify-between items-center" onClick={() => setIsYears(prev => !prev)}>
-        <div className="flex gap-x-1 font-semibold"><span id="month">{StoreMonth ?? ''}</span> . <span id="year">{StoreYear ?? ''}</span></div>
+        <div className="flex gap-x-1 font-semibold"><span id="month">{StoreMonth ?? 'October'}</span> . <span id="year">{StoreYear ?? '2024'}</span></div>
         <span className="font-bold text-xl">↓</span>
         <div className={`${isYears ? 'flex' : 'hidden'} bg-white absolute -bottom-48 z-30 left-0 w-full  flex-col gap-y-2 border`}>
           {years.map(item => (

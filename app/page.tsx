@@ -1,4 +1,4 @@
-import { Enhance } from './enhance';
+import Enhance from './enhance';
 import { getYears } from './server'
 export default async function Home() {
 
