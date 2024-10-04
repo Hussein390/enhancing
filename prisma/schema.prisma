@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Years {
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  years  Int
+  months Months[]
+}
+
+model Months {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  MonthName String
+  years     Years?  @relation(fields: [yearsId], references: [id])
+  yearsId   String? @db.ObjectId
+
+  days Days[]
+}
+
+model Days {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  isTrue  Boolean
+  postion Int
+
+  months  Months? @relation(fields: [monthId], references: [id])
+  monthId String? @db.ObjectId
+}
